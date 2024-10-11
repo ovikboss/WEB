@@ -8,8 +8,16 @@
   <body>
     <div class="main">
       {% if name != 'нет' %}
-    <h1>Hello, {{ name }}!</h1>
-    <p>Приветствую на нашем портале</p>
+    <h1>Личный кабинет</h1>
+        <p><strong>Имя:</strong> {{ name.name }} <br>
+          <strong>Номер:</strong> {{name.phonenum}} <br>
+          <strong>Контакты:</strong>
+          <ol>
+          {% for cont in name.contact %}
+                <li> {{ cont }}  </li>
+          {% endfor %}
+          </ol>
+        </p>
     {% else %}
     <p>Вы не авторизованы</p>
     {% endif %}

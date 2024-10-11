@@ -11,6 +11,10 @@ body {
     flex-direction: column;
     margin: 0;
 }
+li{
+    align-items: center;
+    text-align: center;
+}
 
 .main {
     background-color: #fff;
