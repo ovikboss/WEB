@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+   <meta charset="UTF-8">
+   <link rel="stylesheet" href="../static/style.css">
+   <title>Hello Page</title>
+  </head>
+  <body>
+    <div class="main">
+      {% if name != 'нет' %}
+    <h1>Личный кабинет</h1>
+        <p><strong>Имя:</strong> {{ name.name }} <br>
+          <strong>Номер:</strong> {{name.phonenum}} <br>
+          <strong>Контакты:</strong>
+          <ol>
+          {% for cont in name.contact %}
+                <li> {{ cont }}  </li>
+          {% endfor %}
+          </ol>
+        </p>
+        <form  method="post">
+          <label for="phonenum">
+                Phone Number:
+          </label>
+          <input type="text" 
+                 id="addphonenum" 
+                 name="addphonenum" 
+                 placeholder="Enter phone number" required>
+
+          <label for="first">
+                Username:
+          </label>
+          <input type="text" 
+                 id="addname" 
+                 name="addusername" 
+                 placeholder="Enter Name" required>
+
+          </label>
+          <div class="wraper" >
+                <button  type="submit"
+                        onclick="solve()">
+                      добавить контакт
+                </button>
+          </div>
+    </form>
+  
+  <button> <a href="/exit/">Выйти</a></button>
+
+    {% else %}
+    <p>Вы не авторизованы</p>
+    {% endif %}
+  </div>
+  </body>
+</html>

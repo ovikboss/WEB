@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+      <title>Авторизация</title>
+      <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+      <div class="main">
+            <h1>Добро пожаловать</h1>
+            <h3>Введите логин и пароль</h3>
+            <form method="POST">
+                  <label for="first">
+                        Username:
+                  </label>
+                  <input type="text" 
+                         id="first" 
+                         name="username" 
+                         placeholder="Enter your Username" required>
+
+                  <label for="password">
+                        Password:
+                  </label>
+                  <input type="password"
+                         id="password" 
+                         name="password"
+                         placeholder="Enter your Password" required>
+
+                  <div class="wrap">
+                        <button type="submit"
+                                onclick="solve()">
+                              Войти
+                        </button>
+                  </div>
+            </form>
+            <a style= "color: red;">{{ massage  }}</a>
+      </div>
+</body>
+
+</html>
