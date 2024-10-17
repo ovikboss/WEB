@@ -18,6 +18,34 @@
           {% endfor %}
           </ol>
         </p>
+        <form  method="post">
+          <label for="phonenum">
+                Phone Number:
+          </label>
+          <input type="text" 
+                 id="addphonenum" 
+                 name="addphonenum" 
+                 placeholder="Enter phone number" required>
+
+          <label for="first">
+                Username:
+          </label>
+          <input type="text" 
+                 id="addname" 
+                 name="addusername" 
+                 placeholder="Enter Name" required>
+
+          </label>
+          <div class="wraper" >
+                <button  type="submit"
+                        onclick="solve()">
+                      добавить контакт
+                </button>
+          </div>
+    </form>
+  
+  <button> <a href="/exit/">Выйти</a></button>
+
     {% else %}
     <p>Вы не авторизованы</p>
     {% endif %}

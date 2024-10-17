@@ -1,8 +1,6 @@
 import sqlite3 as sq
-import asyncio
-from models import Contact, ContactCollection
 
-with sq.connect("users.db",timeout=30,check_same_thread=False) as con:
+with sq.connect("C:\\Users\\ovikb\\Desktop\\проекты\\Flask\\WEB\\users.db",timeout=30,check_same_thread=False) as con:
     cur=con.cursor()
     cur.execute("""CREATE TABLE IF NOT EXISTS USERS(
        user_id INTEGER PRIMARY KEY,
@@ -12,9 +10,9 @@ with sq.connect("users.db",timeout=30,check_same_thread=False) as con:
        contact_coll  TEXT)
     """)
 
-    def insert(name, password, contacts,phonenum):
-        cur.execute("""INSERT INTO USERS (user_name,password,contact_coll,phonenum)VALUES(?,?,?,?)""",
-                    (name,password,contacts,phonenum))
+    def insert(name, password,phonenum):
+        cur.execute("""INSERT INTO USERS (user_name,password,phonenum,contact_coll)VALUES(?,?,?,"")""",
+                    (name,password,phonenum))
         con.commit()
     
     def select(username):
@@ -39,14 +37,19 @@ with sq.connect("users.db",timeout=30,check_same_thread=False) as con:
             return False
         
     def dictlist(mytuple):
-        con = mytuple[4].split("\n")
-        print(mytuple)
-        mydict = {"name":mytuple[1],"contact":con,"phonenum":mytuple[2]}
-        return mydict
-    
-    
+        if mytuple[4] is not None:
+            con = mytuple[4].split("\n")
+            print(mytuple)
+            mydict = {"name":mytuple[1],"contact":con,"phonenum":mytuple[2]}
+            return mydict
+        else:
+            return {"name":mytuple[1],"contact":"","phonenum":mytuple[2]}
+        
+    def update(name, contact):
+        cur.execute("UPDATE USERS SET contact_coll = contact_coll || ? WHERE user_name = ?", (contact, name))
+        con.commit()
 
-    
+
 
 
 
