@@ -1,33 +1,33 @@
 /*style.css*/
 body {
-    background-color: #6f6f6f;
+    margin-top: 50px;
+    height: 100%;
+    width: 100%;
+    background:linear-gradient( rgb(93, 93, 93),rgb(230, 230, 230));
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: sans-serif;
     line-height: 1.5;
     min-height: 100vh;
-    background: #f3f3f3;
     flex-direction: column;
     margin: 0;
 }
-li{
-    align-items: center;
-    text-align: center;
-}
+
 
 .main {
+    margin-top: 70px;
     background-color: #fff;
     border-radius: 15px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     padding: 10px 20px;
     transition: transform 0.2s;
-    width: 500px;
+    width: 70%;
     text-align: center;
 }
 
 h1 {
-    color: #4CAF50;
+    color: #555;
 }
 
 label {
@@ -59,13 +59,19 @@ button {
     border: none;
     color: white;
     cursor: pointer;
-    background-color: #4CAF50;
+    background-color: #555;
     width: 100%;
     font-size: 16px;
 }
 
-.wrap {
+.wraper {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+table{
+    height: 5%;
+    width: 100%;
 }

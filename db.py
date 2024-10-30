@@ -1,56 +1,97 @@
-import sqlite3 as sq
+from typing import List
+from typing import Optional
+from sqlalchemy import ForeignKey
+from sqlalchemy import String
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from sqlalchemy.orm import Session
+from sqlalchemy import select, delete
 
-with sq.connect("C:\\Users\\ovikb\\Desktop\\проекты\\Flask\\WEB\\users.db",timeout=30,check_same_thread=False) as con:
-    cur=con.cursor()
-    cur.execute("""CREATE TABLE IF NOT EXISTS USERS(
-       user_id INTEGER PRIMARY KEY,
-       user_name CHAR(16),
-       phonenum INTEGER,
-       password CHAR(12),
-       contact_coll  TEXT)
-    """)
+from sqlalchemy import create_engine
+engine = create_engine("sqlite:///Users.db")
 
-    def insert(name, password,phonenum):
-        cur.execute("""INSERT INTO USERS (user_name,password,phonenum,contact_coll)VALUES(?,?,?,"")""",
-                    (name,password,phonenum))
-        con.commit()
-    
-    def select(username):
-        cur.execute(""" SELECT * FROM USERS WHERE user_name = ?""",(username,))
-        cnt = cur.fetchone()
-        return cnt
-    
-    def checkpass(username,password):
-        cur.execute(""" SELECT password FROM USERS WHERE user_name = ?""",(username,))
-        cnt = cur.fetchone()
-        if password == cnt[0]:
-            return True
-        else:
+class Base(DeclarativeBase):
+    pass
+
+class User(Base):
+    __tablename__ = "user_account"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(30))
+    password:Mapped[str] = mapped_column(String(30))
+    fullname: Mapped[Optional[str]]
+    phone_number :Mapped[str]
+    contacts: Mapped[List["Contact"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    def __repr__(self) -> str:
+        return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r})"
+
+class Contact(Base):
+    __tablename__ = "contacts"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    phone_number: Mapped[str]
+    coment: Mapped[str]
+    name:Mapped[str] = mapped_column(String(30))
+    user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
+    user: Mapped["User"] = relationship(back_populates="contacts")
+    def __repr__(self) -> str:
+        return f"Contact:(id={self.id!r}, Номер телефона={self.phone_number!r}, Комментарий={self.coment!r})"
+
+Base.metadata.create_all(engine)
+
+def new_user(Name: str, Full_name: str, Phone_number: str, Passw:str ):
+        with Session(engine) as session:
+            user = User(name = Name,fullname = Full_name, phone_number = Phone_number ,password = Passw)
+            session.add_all([user])
+            session.commit()
+            return user.id
+
+def new_conntact(Name: str, Phone_number: str, Coment:str , ID:int):
+        with Session(engine) as session:
+            stmt = select(User).where(User.id.in_([ID]))
+            for user in session.scalars(stmt):
+                user.contacts.append(Contact(name = Name, phone_number = Phone_number ,coment = Coment, user_id = ID))
+            session.add_all([user])
+            session.commit()
+
+def check_pass_log(login ,password):
+     with Session(engine) as session:
+            stmt = select(User).where(User.name.in_([login]))
+            for user in session.scalars(stmt):
+                if user :
+                    if password ==  user.password:
+                        return True
+                 
             return False
-    
-    def checklog(username):
-        cur.execute(""" SELECT EXISTS(SELECT 1 FROM USERS WHERE user_name  = ?)""", (username,))
-        cnt = cur.fetchone()
-        if cnt != (0,):
-            return True
-        else:
+     
+def check_log(login ):
+     with Session(engine) as session:
+            stmt = select(User).where(User.name.in_([login]))
+            for user in session.scalars(stmt):
+                if user.name == login:
+                        return True
+                 
             return False
+     
+def select_contacts(ID):
+     data = []
+     with Session(engine) as session:   
+        stmt = select(Contact).where(User.id.in_([ID]))
+        for cont in session.scalars(stmt):
+            data.append({"ID":cont.id,"Name":cont.name,"Phonenum":cont.phone_number,"Coment":cont.coment})
+        return data
+    
+def select_num(name):
+    with Session(engine) as session:
+        stmt = select(User).where(User.name == name)
+        for user in session.scalars(stmt):
+             return user.phone_number, user.id
+
         
-    def dictlist(mytuple):
-        if mytuple[4] is not None:
-            con = mytuple[4].split("\n")
-            print(mytuple)
-            mydict = {"name":mytuple[1],"contact":con,"phonenum":mytuple[2]}
-            return mydict
-        else:
-            return {"name":mytuple[1],"contact":"","phonenum":mytuple[2]}
-        
-    def update(name, contact):
-        cur.execute("UPDATE USERS SET contact_coll = contact_coll || ? WHERE user_name = ?", (contact, name))
-        con.commit()
 
+          
 
-
-
-
-
+     
+                

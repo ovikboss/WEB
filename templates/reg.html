@@ -1,39 +1,17 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-      <title>Регистрация</title>
-      <link rel="stylesheet" href="../static/style.css">
-</head>
-
-<body>
+{% extends 'base.html' %}
+{% block title%}Страница авторизации{% endblock %}
+{% block body %}
       <div class="main">
             <h1>Добро пожаловать</h1>
             <form method="POST" >
-                  <label for="phonenum">
-                        Phone Number:
-                  </label>
-                  <input type="text" 
-                         id="phonenum" 
-                         name="phonenum" 
-                         placeholder="Enter your phone number" required>
-
-                  <label for="first">
-                        Username:
-                  </label>
-                  <input type="text" 
-                         id="first" 
-                         name="username" 
-                         placeholder="Enter your Username" required>
-
-                  <label for="password">
-                        Password:
-                  </label>
-                  <input type="password"
-                         id="password" 
-                         name="password"
-                         placeholder="Enter your Password" required>
-
+                  <label for="phonenum">Phone Number:</label>
+                  <input type="text"  id="phonenum"  name="phonenum" placeholder="Enter your phone number" required>
+                  <label for="first"> Username:</label>
+                  <input type="text" id="first" name="username" placeholder="Enter your Username" required>
+                  <label for="password">Password:</label>
+                  <input type="password"  id="password"  name="password" placeholder="Enter your Password" required>
+                  <label for="fullname">fullname:</label>
+                  <input type="password"  id="fullname"  name="fullname" placeholder="fullname" required>
                   <div class="wrap">
                         <button type="submit"
                                 onclick="solve()">
@@ -41,8 +19,6 @@
                         </button>
                   </div>
             </form>
-            <a style= "color: red;">{{ massage  }}</a>
+            <a style= "color: red;">{{ massage }}</a>
       </div>
-</body>
-
-</html>
+{% endblock %}

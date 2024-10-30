@@ -1,54 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-   <meta charset="UTF-8">
-   <link rel="stylesheet" href="../static/style.css">
-   <title>Hello Page</title>
-  </head>
-  <body>
+{% extends 'base.html' %}
+{% block title%}Страница авторизации{% endblock %}
+{% block body %}
     <div class="main">
-      {% if name != 'нет' %}
-    <h1>Личный кабинет</h1>
-        <p><strong>Имя:</strong> {{ name.name }} <br>
-          <strong>Номер:</strong> {{name.phonenum}} <br>
+      {% if 1 %}
+      <h1>Личный кабинет</h1>
+          <strong>Имя:</strong> {{ name }}
+          <strong>Номер:</strong> {{phonenumber}}<br>
           <strong>Контакты:</strong>
-          <ol>
-          {% for cont in name.contact %}
-                <li> {{ cont }}  </li>
+          <table border = "3">
+          {% for cont in contact %}
+               <tr>
+                <form action="/change_contact/{{cont.ID}}" method="post">
+                <td>Имя: {{ cont.Name }}<input name="changename" placeholder="Изменить имя"></td>
+                <td>Номер телефона:{{ cont.Phonenum }}<input name="changephone" placeholder="Изменить номер"></td>
+                <td>Комментарий:{{ cont.Coment }}<input name="changecoment" placeholder="Изменить комментарий"></td>
+                <td>
+                  <button>Изменить</button>
+                </form>
+              </form>
+                <td><form action="/delete_contact/{{ cont.ID }}" method="post">
+                  <button >Удалить</button>
+                 </form>
+               </tr>
           {% endfor %}
-          </ol>
-        </p>
+        </table>
         <form  method="post">
-          <label for="phonenum">
-                Phone Number:
-          </label>
-          <input type="text" 
-                 id="addphonenum" 
-                 name="addphonenum" 
-                 placeholder="Enter phone number" required>
-
-          <label for="first">
-                Username:
-          </label>
-          <input type="text" 
-                 id="addname" 
-                 name="addusername" 
-                 placeholder="Enter Name" required>
-
-          </label>
+          <label for="phonenum">Номер телефона</label>
+          <input type="text" id="addphonenum" name="addphonenum" placeholder="Enter phone number">
+          <label for="first">Имя </label>
+          <input type="text" id="addname" name="addusername" placeholder="Enter Name" >
+          <label for="addcomment">Комментарий</label>
+          <input type="text" id="addcomment" name="addcomment" placeholder="Enter comment"  >
           <div class="wraper" >
-                <button  type="submit"
-                        onclick="solve()">
-                      добавить контакт
-                </button>
+                <button  type="submit">Добавить контакт</button >
           </div>
     </form>
-  
-  <button> <a href="/exit/">Выйти</a></button>
-
+    <form action="/exit/" >
+      <button>Выход</button>
+     </form>
     {% else %}
     <p>Вы не авторизованы</p>
     {% endif %}
   </div>
-  </body>
-</html>
+{% endblock %}
