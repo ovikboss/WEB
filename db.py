@@ -36,55 +36,68 @@ class Contact(Base):
 Base.metadata.create_all(engine)
 
 def new_user(Name: str, Full_name: str, Phone_number: str, Passw:str ):
+    try:
         with Session(engine) as session:
             user = User(name = Name,fullname = Full_name, phone_number = Phone_number ,password = Passw)
             session.add_all([user])
             session.commit()
             return user.id
+    except Exception as ex:
+             print(ex)
 
 def new_conntact(Name: str, Phone_number: str, Coment:str , ID:int):
+    try:
         with Session(engine) as session:
             stmt = select(User).where(User.id.in_([ID]))
             for user in session.scalars(stmt):
                 user.contacts.append(Contact(name = Name, phone_number = Phone_number ,coment = Coment, user_id = ID))
             session.add_all([user])
             session.commit()
+    except Exception as ex:
+             print(ex)
 
 def check_pass_log(login ,password):
-     with Session(engine) as session:
-            stmt = select(User).where(User.name.in_([login]))
-            for user in session.scalars(stmt):
-                if user :
-                    if password ==  user.password:
-                        return True
-                 
-            return False
+    try:    
+        with Session(engine) as session:
+                stmt = select(User).where(User.name.in_([login]))
+                for user in session.scalars(stmt):
+                    if user :
+                        if password ==  user.password:
+                            return True            
+                return False
+    except Exception as ex:
+             print(ex)
      
 def check_log(login ):
-     with Session(engine) as session:
-            stmt = select(User).where(User.name.in_([login]))
-            for user in session.scalars(stmt):
-                if user.name == login:
-                        return True
-                 
-            return False
+        try:
+            with Session(engine) as session:
+                stmt = select(User).where(User.name.in_([login]))
+                for user in session.scalars(stmt):
+                    if user.name == login:
+                            return True
+                return False
+        except Exception as ex:
+             print(ex)
      
 def select_contacts(ID):
-     data = []
-     print(ID)
-     with Session(engine) as session:   
-        stmt = select(Contact).where(Contact.user_id == ID)
-        for cont in session.scalars(stmt):
-            data.append({"ID":cont.id,"Name":cont.name,"Phonenum":cont.phone_number,"Coment":cont.coment})
-        print(data)
-        return data
+    try:    
+        data = []
+        with Session(engine) as session:   
+            stmt = select(Contact).where(Contact.user_id == ID)
+            for cont in session.scalars(stmt):
+                data.append({"ID":cont.id,"Name":cont.name,"Phonenum":cont.phone_number,"Coment":cont.coment})
+            return data
+    except Exception as ex:
+             print(ex)
     
 def select_num(name):
-    with Session(engine) as session:
-        stmt = select(User).where(User.name == name)
-        for user in session.scalars(stmt):
-             return user.phone_number, user.id
-
+    try:
+        with Session(engine) as session:
+            stmt = select(User).where(User.name == name)
+            for user in session.scalars(stmt):
+                return user.phone_number, user.id
+    except Exception as ex:
+             print(ex)
         
 
           
