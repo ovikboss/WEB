@@ -1,13 +1,7 @@
 from typing import List
 from typing import Optional
-from sqlalchemy import ForeignKey
-from sqlalchemy import String
-from sqlalchemy.orm import DeclarativeBase
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
-from sqlalchemy.orm import Session
-from sqlalchemy import select, delete
+from sqlalchemy import ForeignKey, String, select, delete
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship, Session
 
 from sqlalchemy import create_engine
 engine = create_engine("sqlite:///Users.db")
@@ -77,10 +71,12 @@ def check_log(login ):
      
 def select_contacts(ID):
      data = []
+     print(ID)
      with Session(engine) as session:   
-        stmt = select(Contact).where(User.id.in_([ID]))
+        stmt = select(Contact).where(Contact.user_id == ID)
         for cont in session.scalars(stmt):
             data.append({"ID":cont.id,"Name":cont.name,"Phonenum":cont.phone_number,"Coment":cont.coment})
+        print(data)
         return data
     
 def select_num(name):

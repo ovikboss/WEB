@@ -22,34 +22,43 @@ def hello():
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/auth', methods=['GET', 'POST'])
 def auth():
-    if request.method == 'POST':
-        name = request.form.get("username")
-        passw = request.form.get("password")
-        if check_pass_log(name, passw):
-            session["username"] = name
-            session["password"] = passw
-            session["phonenum"],session["ID"] = select_num(name)
-            return redirect(url_for('hello'))
-        return render_template("auth.html", massage="Неправильный логин или пароль")
-    return render_template('auth.html')
+    if session:
+       return redirect(url_for('hello'))
+    else:
+        if request.method == 'POST':
+            name = request.form.get("username")
+            passw = request.form.get("password")
+            if check_pass_log(name, passw):
+                session["username"] = name
+                session["password"] = passw
+                session["phonenum"],session["ID"] = select_num(name)
+                return redirect(url_for('hello'))
+            return render_template("auth.html", massage="Неправильный логин или пароль")
+        return render_template('auth.html')
+
 
 @app.route('/reg', methods=['GET', 'POST'])
 def register():
-    if request.method == 'POST':
-        name = request.form["username"]
-        passw = request.form["password"]
-        num = request.form["phonenum"]
-        full_name = request.form["fullname"]
-        if check_log(name):
-            return     render_template("reg.html", massage="Имя пользователя занято")
-        else:
-            session["phonenum"] = num
-            session["username"] = name
-            session["ID"] = new_user(Name= name, Full_name=full_name, Phone_number= num, Passw = passw)
-            return redirect(url_for('hello'))
+    if  session:
+       return redirect(url_for('hello'))
+
+    else:
+        if request.method == 'POST':
+            name = request.form["username"]
+            passw = request.form["password"]
+            num = request.form["phonenum"]
+            full_name = request.form["fullname"]
+            if check_log(name):
+                return     render_template("reg.html", massage="Имя пользователя занято")
+            else:
+                session["phonenum"] = num
+                session["username"] = name
+                session["ID"] = new_user(Name= name, Full_name=full_name, Phone_number= num, Passw = passw)
+                return redirect(url_for('hello'))
+        return render_template("reg.html",massage = "test")
 
 
-    return render_template("reg.html",massage = "test")
+
 
 @app.route('/exit/')
 def signout():
